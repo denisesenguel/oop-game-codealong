@@ -37,14 +37,18 @@ class Game {
                 // don't move new obstacle immediately
                 if (!(skipLastIn && index == this.obstacles.length - 1)) {
                     
-                    obstacle.moveDown();
-                    this.drawDomElm(obstacle);
-
-                    this.detectCollision();
+                    if (obstacle.position.y == 100 - obstacle.width) {
+                        this.rmDomElm(obstacle);
+                    } else {
+                        obstacle.moveDown();
+                        this.drawDomElm(obstacle);
+                        this.detectCollision();
+                    }
                 }
             });
+
             this.timer++;
-        }, 1000);
+        }, 500);
 
     }
 
@@ -84,6 +88,10 @@ class Game {
         
         instance.domElement.style.top = instance.position.y + "vh";
         instance.domElement.style.left = instance.position.x + "vw";
+    }
+
+    rmDomElm(instance) {
+        instance.domElement.style.display = 'none';
     }
 
     detectCollision() {
@@ -131,11 +139,14 @@ class Player extends boardObject {
     }
 
     moveLeft() {
-        this.position.x -= this.speed;
+        if (this.position.x >= this.speed) {
+            this.position.x -= this.speed;
+        }
     }
 
     moveRight() {
-        this.position.x += this.speed;
+        const newPos = this.position.x + this.speed;
+        if (newPos <= 100 - this.width) this.position.x = newPos;
     }
 }
 
@@ -143,11 +154,15 @@ class Obstacle extends boardObject {
 
     constructor() {
         super('obstacle');
-        this.position = {x: Math.floor(Math.random() * 100), y: 0};
+        this.position = {
+            x: Math.floor(Math.random() * (100-this.width)), 
+            y: 0
+        };
     }
 
     moveDown() {
-        this.position.y += this.speed;
+        const newPos = this.position.y + this.speed;
+        if (newPos <= 100 - this.height) this.position.y = newPos;
     }
 }
 
