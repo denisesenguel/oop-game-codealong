@@ -12,3 +12,8 @@ html, body {
     background-color: crimson;
     position: absolute;
 }
+
+.obstacle {
+    background-color: darkblue;
+    position: absolute;
+}
