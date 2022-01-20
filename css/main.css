@@ -17,3 +17,10 @@ html, body {
     background-color: darkblue;
     position: absolute;
 }
+
+#game-over {
+    display: block;
+    margin: 0 auto;
+    padding: 40vh 40vw;
+}
+

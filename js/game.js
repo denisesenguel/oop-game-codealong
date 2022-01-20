@@ -36,8 +36,10 @@ class Game {
 
                 // don't move new obstacle immediately
                 if (!(skipLastIn && index == this.obstacles.length - 1)) {
+                    
                     obstacle.moveDown();
                     this.drawDomElm(obstacle);
+
                     this.detectCollision();
                 }
             });
@@ -88,11 +90,13 @@ class Game {
 
         this.obstacles.forEach(obstacle => {
             
-            const xOverlap = obstacle.position.x - this.player.position.x <= this.player.width;
-            const yOverlap = obstacle.position.y - this.player.position.y <= this.player.height;
-            
+            const xOverlap = (obstacle.position.x < this.player.position.x + this.player.width) && 
+                (this.player.position.x < obstacle.position.x + obstacle.width);
+            const yOverlap = (obstacle.position.y < this.player.position.y + this.player.height) && 
+                (this.player.position.y < obstacle.position.y + obstacle.height);
+
             if (xOverlap && yOverlap) {
-                this.stop()
+                this.stop();
             }
         });
         
@@ -103,7 +107,7 @@ class Game {
         clearInterval(this.intervalID);
 
         const board = document.getElementById('board');
-        board.innerHTML = "<h1>Game Over!</h1>";
+        board.innerHTML = '<h1 id="game-over">Game Over!</h1>';
     }
 }
 
@@ -111,10 +115,10 @@ class boardObject {
 
     constructor(type) {
         this.className = type;
-        this.position = {x: 0, y: 0};
         this.speed = 10;
         this.width = 10;
         this.height = 10;
+        this.position = {x: 0, y: 0};
         this.domElement = null;
     }
 }
@@ -123,6 +127,7 @@ class Player extends boardObject {
 
     constructor() {
         super('player');
+        this.position.y = 100 - this.height;
     }
 
     moveLeft() {
@@ -138,7 +143,7 @@ class Obstacle extends boardObject {
 
     constructor() {
         super('obstacle');
-        this.position = {x: 50, y: 0};
+        this.position = {x: Math.floor(Math.random() * 100), y: 0};
     }
 
     moveDown() {
