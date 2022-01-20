@@ -16,9 +16,11 @@ class Game {
         // allow player to move
         this.addEventListeners();
 
-        // add and move obstacles 
+        // add falling obstacles 
         setInterval(() => {
             
+            let skipLastIn = false;
+
             if (this.timer % 5 == 0) {
 
                 // create new obstacle
@@ -26,15 +28,21 @@ class Game {
                 newObstacle.domElement = this.createDomElm(newObstacle);
                 this.drawDomElm(newObstacle);
                 this.obstacles.push(newObstacle);
+
+                skipLastIn = true;
             }
             
             // move all obstacles
-            this.obstacles.forEach(obstacle => {
-                obstacle.moveDown();
-                this.drawDomElm(obstacle);
+            this.obstacles.forEach((obstacle, index) => {
+
+                // don't move new obstacle immediately
+                if (!(skipLastIn && index == this.obstacles.length - 1)) {
+                    obstacle.moveDown();
+                    this.drawDomElm(obstacle);
+                }
             });
             this.timer++;
-        }, 500);
+        }, 1000);
 
     }
 
