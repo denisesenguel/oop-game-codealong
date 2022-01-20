@@ -1,0 +1,14 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#board {
+    background-color: pink;
+    height: 100vh;
+}
+
+.player {
+    background-color: crimson;
+    position: absolute;
+}
