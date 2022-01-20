@@ -9,7 +9,6 @@ class Game {
 
         // create player
         this.player = new Player();
-        console.log(this.player.position);
         this.player.domElement = this.createDomElm(this.player);
         this.drawDomElm(this.player);
         
@@ -17,7 +16,7 @@ class Game {
         this.addEventListeners();
 
         // add falling obstacles 
-        setInterval(() => {
+        this.intervalID = setInterval(() => {
             
             let skipLastIn = false;
 
@@ -39,6 +38,7 @@ class Game {
                 if (!(skipLastIn && index == this.obstacles.length - 1)) {
                     obstacle.moveDown();
                     this.drawDomElm(obstacle);
+                    this.detectCollision();
                 }
             });
             this.timer++;
@@ -59,6 +59,8 @@ class Game {
                     break;                
             }
             this.drawDomElm(this.player);
+
+            this.detectCollision();
         });
     }
 
@@ -80,6 +82,28 @@ class Game {
         
         instance.domElement.style.top = instance.position.y + "vh";
         instance.domElement.style.left = instance.position.x + "vw";
+    }
+
+    detectCollision() {
+
+        this.obstacles.forEach(obstacle => {
+            
+            const xOverlap = obstacle.position.x - this.player.position.x <= this.player.width;
+            const yOverlap = obstacle.position.y - this.player.position.y <= this.player.height;
+            
+            if (xOverlap && yOverlap) {
+                this.stop()
+            }
+        });
+        
+    }
+
+    stop() {
+        
+        clearInterval(this.intervalID);
+
+        const board = document.getElementById('board');
+        board.innerHTML = "<h1>Game Over!</h1>";
     }
 }
 
