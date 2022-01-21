@@ -8,6 +8,15 @@ html, body {
     height: 100vh;
 }
 
+#game-over {
+    background-color: pink;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .player {
     background-color: crimson;
     position: absolute;
@@ -18,9 +27,4 @@ html, body {
     position: absolute;
 }
 
-#game-over {
-    display: block;
-    margin: 0 auto;
-    padding: 40vh 40vw;
-}
 

@@ -7,6 +7,10 @@ class Game {
 
     start() {
 
+        // toggle displays
+        document.getElementById('game-over').style.display = 'none';
+        document.getElementById('board').style.display = 'block';
+
         // create player
         this.player = new Player();
         this.player.domElement = this.createDomElm(this.player);
@@ -19,6 +23,7 @@ class Game {
         this.intervalID = setInterval(() => {
             
             let skipLastIn = false;
+            let removeFromArray = false;
 
             if (this.timer % 5 == 0) {
 
@@ -39,13 +44,16 @@ class Game {
                     
                     if (obstacle.position.y == 100 - obstacle.width) {
                         this.rmDomElm(obstacle);
+                        removeFromArray = true;
                     } else {
                         obstacle.moveDown();
                         this.drawDomElm(obstacle);
-                        this.detectCollision();
+                        this.detectCollision(obstacle);
                     }
                 }
             });
+            
+             if (removeFromArray) this.obstacles.shift();
 
             this.timer++;
         }, 500);
@@ -66,7 +74,9 @@ class Game {
             }
             this.drawDomElm(this.player);
 
-            this.detectCollision();
+            this.obstacles.forEach(obstacle => {
+                this.detectCollision(obstacle);
+            });
         });
     }
 
@@ -94,19 +104,16 @@ class Game {
         instance.domElement.style.display = 'none';
     }
 
-    detectCollision() {
+    detectCollision(obstacle) {
 
-        this.obstacles.forEach(obstacle => {
-            
-            const xOverlap = (obstacle.position.x < this.player.position.x + this.player.width) && 
-                (this.player.position.x < obstacle.position.x + obstacle.width);
-            const yOverlap = (obstacle.position.y < this.player.position.y + this.player.height) && 
-                (this.player.position.y < obstacle.position.y + obstacle.height);
+        const xOverlap = (obstacle.position.x < this.player.position.x + this.player.width) && 
+            (this.player.position.x < obstacle.position.x + obstacle.width);
+        const yOverlap = (obstacle.position.y < this.player.position.y + this.player.height) && 
+            (this.player.position.y < obstacle.position.y + obstacle.height);
 
-            if (xOverlap && yOverlap) {
-                this.stop();
-            }
-        });
+        if (xOverlap && yOverlap) {
+            this.stop();
+        }
         
     }
 
@@ -115,8 +122,14 @@ class Game {
         clearInterval(this.intervalID);
 
         const board = document.getElementById('board');
-        board.innerHTML = '<h1 id="game-over">Game Over!</h1>';
+        const gameOver = document.getElementById('game-over');
+
+        board.innerHTML = "";
+        board.style.display = 'none';
+        gameOver.style.display = 'flex';
     }
+
+
 }
 
 class boardObject {
@@ -168,5 +181,13 @@ class Obstacle extends boardObject {
 
 const game = new Game();
 game.start();
+
+document.getElementById('play-again').addEventListener('click', () => {
+    
+    delete game;
+    const game = new Game();
+    console.log(game);
+    game.start();
+});
 
 
