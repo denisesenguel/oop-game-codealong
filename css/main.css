@@ -6,9 +6,10 @@ html, body {
 #board {
     background-color: pink;
     height: 100vh;
+    display: none;
 }
 
-#game-over {
+#inbetween-screen {
     background-color: pink;
     height: 100vh;
     display: flex;

@@ -8,7 +8,7 @@ class Game {
     start() {
 
         // toggle displays
-        document.getElementById('game-over').style.display = 'none';
+        document.getElementById('inbetween-screen').style.display = 'none';
         document.getElementById('board').style.display = 'block';
 
         // create player
@@ -123,13 +123,15 @@ class Game {
         clearInterval(this.intervalID);
 
         const board = document.getElementById('board');
-        const gameOver = document.getElementById('game-over');
+        const inbetween = document.getElementById('inbetween-screen');
 
         board.innerHTML = "";
-        board.style.display = 'none';
-        gameOver.style.display = 'flex';
-    }
 
+        board.style.display = 'none';
+        inbetween.style.display = 'flex';
+        inbetween.getElementsByTagName('h1')[0].innerText = "Game Over!";
+        inbetween.getElementsByTagName('button')[0].innerText = "Play Again";
+    }
 
 }
 
@@ -180,14 +182,8 @@ class Obstacle extends boardObject {
     }
 }
 
-const game = new Game();
-game.start();
-
-document.getElementById('play-again').addEventListener('click', () => {
-    
-    delete game;
+document.getElementById ('play').addEventListener('click', () => {
     const game = new Game();
-    console.log(game);
     game.start();
 });
 
