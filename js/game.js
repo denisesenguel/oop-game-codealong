@@ -101,7 +101,8 @@ class Game {
     }
 
     rmDomElm(instance) {
-        instance.domElement.style.display = 'none';
+        const board = document.getElementById('board');
+        board.removeChild(instance.domElement);
     }
 
     detectCollision(obstacle) {
